@@ -25,6 +25,7 @@
             v-for="result in searchResult"
             :key="result.id"
             class="py-2 cursor-pointer hover:bg-weather-primary px-2"
+            @click="previewCity(result)"
           >
             {{ result.name }}, {{ result.admin1 }} - {{ result.country }}
           </li>
@@ -37,17 +38,37 @@
 <script setup>
 import { ref } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 
 const searchQuery = ref("");
 const queryTimeOut = ref(null);
 const searchResult = ref([]);
 const searchError = ref(null);
+const router = useRouter();
+
+const previewCity = (city) => {
+  router.push({
+    name: "cityView",
+    params: {
+      state: city.admin1?.replaceAll(" ", "") ?? city.country.replaceAll(" ", ""),
+      city: city.name.replaceAll(" ", ""),
+    },
+    query: {
+      lat: city.latitude,
+      lng: city.longitude,
+      preview: true,
+    },
+  });
+
+  searchQuery.value = "";
+  searchResult.value = [];
+};
 
 const getSearchResults = () => {
   clearTimeout(queryTimeOut.value);
 
   queryTimeOut.value = setTimeout(async () => {
-    searchError.value = false; 
+    searchError.value = false;
 
     if (searchQuery.value.trim() !== "") {
       try {
@@ -60,7 +81,7 @@ const getSearchResults = () => {
               language: "en",
               format: "json",
             },
-          }
+          },
         );
 
         searchResult.value = result.data.results || [];
@@ -75,5 +96,4 @@ const getSearchResults = () => {
     searchResult.value = [];
   }, 300);
 };
-
 </script>
