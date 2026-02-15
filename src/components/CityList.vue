@@ -13,7 +13,7 @@
 
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import CityCard from "./CityCard.vue";
 import { useRouter } from "vue-router";
 
@@ -21,34 +21,32 @@ const savedCities = ref([]);
 
 const getCities = async () => {
   const saved = localStorage.getItem("savedCities");
-  if (saved) {
-    savedCities.value = JSON.parse(saved);
+  if (!saved) return;
 
-    const requests = savedCities.value.map((city) =>
-      axios.get("https://api.open-meteo.com/v1/forecast", {
-        params: {
-          latitude: city.coords.lat,
-          longitude: city.coords.lng,
-          current_weather: true,
-          daily: "temperature_2m_max,temperature_2m_min",
-          timezone: "auto",
-        },
-      }),
-    );
+  savedCities.value = JSON.parse(saved);
 
-    try {
-      const responses = await Promise.all(requests);
-      responses.forEach((res, index) => {
-        savedCities.value[index].weather = res.data;
-      });
-    } catch (err) {
-      console.error("Erro ao buscar o clima:", err);
-    }
-  }
+  const requests = savedCities.value.map((city) =>
+    axios.get("https://api.open-meteo.com/v1/forecast", {
+      params: {
+        latitude: city.coords.lat,
+        longitude: city.coords.lng,
+        current_weather: true,
+        daily: "temperature_2m_max,temperature_2m_min",
+        timezone: "auto",
+      },
+    })
+  );
+
+  const responses = await Promise.all(requests);
+
+  await new Promise((res) => setTimeout(res, 1000));
+
+  responses.forEach((res, index) => {
+    savedCities.value[index].weather = res.data;
+  });
 };
-onMounted(() => {
-  getCities();
-});
+
+await getCities();
 
 const router = useRouter();
 const goToCityView = (city) => {

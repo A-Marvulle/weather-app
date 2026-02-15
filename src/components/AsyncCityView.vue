@@ -156,7 +156,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, computed } from "vue";
 import axios from "axios";
 import { useRoute, useRouter } from "vue-router";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -226,6 +226,7 @@ const getWeatherData = async () => {
         timezone: "auto",
       },
     });
+     await new Promise((res) => setTimeout(res, 1000));
     weatherData.value = response.data;
     console.log(weatherData.value);
   } catch (err) {
@@ -234,9 +235,8 @@ const getWeatherData = async () => {
   }
 };
 
-onMounted(() => {
-  getWeatherData();
-});
+await getWeatherData();
+
 
 const router = useRouter();
 const removeCity = () => {
