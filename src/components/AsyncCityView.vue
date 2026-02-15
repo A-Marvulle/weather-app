@@ -1,7 +1,10 @@
 <template>
   <div>
     <div v-if="weatherData" class="flex flex-col flex-1 items-center">
-      <div class="text-white p-4 bg-weather-secondary w-full text-center">
+      <div
+        v-if="route.query.preview"
+        class="text-white p-4 bg-weather-secondary w-full text-center"
+      >
         <p>
           You are currently previewing this city, click the "+" icon to start
           tracking this city.
@@ -140,15 +143,22 @@
           </div>
         </div>
       </div>
-    </div>
 
+      <div
+        class="flex items-center gap-2 py-12 text-white cursor-pointer duration-150 hover:text-red-500"
+        @click="removeCity"
+      >
+        <font-awesome-icon icon="fa-solid fa-trash" />
+        <p>Remove City</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const weatherMap = {
@@ -227,4 +237,14 @@ const getWeatherData = async () => {
 onMounted(() => {
   getWeatherData();
 });
+
+const router = useRouter();
+const removeCity = () => {
+  const cities = JSON.parse(localStorage.getItem("savedCities"));
+  const updatedCities = cities.filter((city) => city.id !== route.query.id);
+  localStorage.setItem("savedCities", JSON.stringify(updatedCities));
+  router.push({
+    name: "home",
+  });
+};
 </script>
