@@ -50,8 +50,8 @@ const previewCity = (city) => {
   router.push({
     name: "cityView",
     params: {
-      state: city.admin1?.replaceAll(" ", "") ?? city.country.replaceAll(" ", ""),
-      city: city.name.replaceAll(" ", ""),
+      state: city.admin1?.replaceAll(" ", "-") ?? city.country.replaceAll(" ", "-"),
+      city: city.name.replaceAll(" ", "-"),
     },
     query: {
       lat: city.latitude,

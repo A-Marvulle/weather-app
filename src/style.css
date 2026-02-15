@@ -2,10 +2,16 @@
 
 @theme {
   /* * Colors */
-  --color-weather-primary: #00668A;
-  --color-weather-secondary: #004E71;
+  --color-weather-primary: #00668a;
+  --color-weather-secondary: #004e71;
 
   /* * Breakpoints */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
+}
+
+.hourly-bar {
+  scrollbar-width: 4px;
+  scrollbar-color: var(--color-weather-secondary) #fff0;
+  scrollbar-gutter: stable;
 }
