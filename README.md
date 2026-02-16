@@ -31,6 +31,7 @@ This project allows you to search for cities, save them, and visualize detailed 
 ---
 
 ## 📂 Project Structure
+<pre>
 📁 src/
 ├── 📁 components/
 │   └── 🟩 AnimatedPlaceholder.vue
@@ -49,6 +50,7 @@ This project allows you to search for cities, save them, and visualize detailed 
 ├── 🟩 App.vue
 ├── 🟨 main.js
 └── 🎨 style.css
+</pre>
 
 ---
 
