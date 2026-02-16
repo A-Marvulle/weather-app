@@ -34,12 +34,14 @@
     </div>
 
     <div class="flex flex-col gap-4">
-      <Suspense>
-        <CityList />
-        <template #fallback>
-          <CityCardSkeleton />
-        </template>
-      </Suspense>
+      <Transition name="fade" mode="out-in">
+        <Suspense>
+          <CityList />
+          <template #fallback>
+            <CityCardSkeleton />
+          </template>
+        </Suspense>
+      </Transition>
     </div>
   </main>
 </template>
